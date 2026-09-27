@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import com.example.FakeCommerce.dtos.CreateCategoryRequestDto;
 import com.example.FakeCommerce.schema.Category;
 import com.example.FakeCommerce.services.CategoryService;
@@ -25,7 +27,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public Category createCategory(@RequestBody CreateCategoryRequestDto requestDto) {
+    public Category createCategory(@Valid @RequestBody CreateCategoryRequestDto requestDto) {
         return categoryService.createCategory(requestDto);
     }
 

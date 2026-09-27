@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import com.example.FakeCommerce.dtos.CreateProductRequestDto;
 import com.example.FakeCommerce.dtos.GetProductResponseDto;
 import com.example.FakeCommerce.dtos.GetProductWithDetailsResponseDto;
-import com.example.FakeCommerce.schema.Product;
 import com.example.FakeCommerce.services.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class ProductController {
     
 
     @PostMapping
-    public GetProductWithDetailsResponseDto createProduct(@RequestBody CreateProductRequestDto requestDto) {
+    public GetProductWithDetailsResponseDto createProduct(@Valid @RequestBody CreateProductRequestDto requestDto) {
         return productService.createProduct(requestDto);
     }
 

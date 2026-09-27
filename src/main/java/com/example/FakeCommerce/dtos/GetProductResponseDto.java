@@ -2,17 +2,15 @@ package com.example.FakeCommerce.dtos;
 
 import java.math.BigDecimal;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @SuperBuilder
 public class GetProductResponseDto {
-    
+
     private Long id;
 
     private String title;
@@ -24,5 +22,4 @@ public class GetProductResponseDto {
     private String image;
 
     private String rating;
-
 }

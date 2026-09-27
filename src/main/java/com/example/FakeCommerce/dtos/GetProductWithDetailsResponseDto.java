@@ -1,15 +1,13 @@
 package com.example.FakeCommerce.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 public class GetProductWithDetailsResponseDto extends GetProductResponseDto {
-    
+
     private String category;
 }

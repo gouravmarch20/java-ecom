@@ -11,11 +11,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-
 @Data
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @NoArgsConstructor
 @Builder
 @Entity
@@ -29,7 +31,8 @@ public class Product extends BaseEntity {
     private String description;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    @Builder.Default
+    private BigDecimal price = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY) // ManyToOne can be read as Many Products can have One Category
     @JoinColumn(name = "category_id", nullable = false)

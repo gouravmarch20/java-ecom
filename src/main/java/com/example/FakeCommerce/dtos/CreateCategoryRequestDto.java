@@ -1,15 +1,13 @@
 package com.example.FakeCommerce.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class CreateCategoryRequestDto {
-    
+
+    @NotBlank(message = "Category name is required")
     private String name;
 }

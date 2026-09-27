@@ -22,30 +22,30 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
+    // ── private helper — maps Product entity to response DTO ──────────────
+    private GetProductResponseDto toResponseDto(Product p) {
+        return GetProductResponseDto.builder()
+                .id(p.getId())
+                .title(p.getTitle())
+                .description(p.getDescription())
+                .price(p.getPrice())
+                .image(p.getImage())
+                .rating(p.getRating())
+                .build();
+    }
+
+    // ── public methods ─────────────────────────────────────────────────────
+
     public List<GetProductResponseDto> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(p -> (GetProductResponseDto) GetProductResponseDto.builder()
-                        .id(p.getId())
-                        .title(p.getTitle())
-                        .description(p.getDescription())
-                        .price(p.getPrice())
-                        .image(p.getImage())
-                        .rating(p.getRating())
-                        .build())
+                .map(this::toResponseDto)
                 .toList();
     }
 
     public GetProductResponseDto getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
-        return GetProductResponseDto.builder()
-                .id(product.getId())
-                .title(product.getTitle())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .image(product.getImage())
-                .rating(product.getRating())
-                .build();
+        return toResponseDto(product);
     }
 
     public GetProductWithDetailsResponseDto getProductWithDetailsById(Long id) {
@@ -86,23 +86,19 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found with id: " + id);
+        }
         productRepository.deleteById(id);
     }
 
     public List<GetProductResponseDto> getProductsByCategory(String categoryName) {
         return productRepository.findByCategory_Name(categoryName).stream()
-                .map(p -> (GetProductResponseDto) GetProductResponseDto.builder()
-                        .id(p.getId())
-                        .title(p.getTitle())
-                        .description(p.getDescription())
-                        .price(p.getPrice())
-                        .image(p.getImage())
-                        .rating(p.getRating())
-                        .build())
+                .map(this::toResponseDto)
                 .toList();
     }
 
     public List<String> getAllCategories() {
-        return productRepository.findAllCategories();
+        return productRepository.getAllLinkedCategories();
     }
 }
