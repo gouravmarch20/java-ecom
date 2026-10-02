@@ -2,13 +2,14 @@ spring:
    application:
     name: FakeCommerceApplication
    datasource:
-    url: jdbc:mysql://localhost:3306/fakecommerce
+    url: jdbc:mysql://localhost:3306/fakecommerce?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password: 'next24@yrM'
     driver-class-name: com.mysql.cj.jdbc.Driver
    flyway:
-    enabled: false
+    enabled: true
+    locations: classpath:db/migration
    jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate

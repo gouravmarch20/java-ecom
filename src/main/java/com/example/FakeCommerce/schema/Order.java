@@ -3,6 +3,8 @@ package com.example.FakeCommerce.schema;
 import com.example.FakeCommerce.enums.OrderStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,5 +23,6 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE orders SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 public class Order extends BaseEntity {
-    private  OrderStatus status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 }
