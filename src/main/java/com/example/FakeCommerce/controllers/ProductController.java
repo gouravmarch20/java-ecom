@@ -2,6 +2,8 @@ package com.example.FakeCommerce.controllers;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
-
+import com.example.FakeCommerce.dtos.ApiResponse;
 import com.example.FakeCommerce.dtos.CreateProductRequestDto;
 import com.example.FakeCommerce.dtos.GetProductResponseDto;
 import com.example.FakeCommerce.dtos.GetProductWithDetailsResponseDto;
 import com.example.FakeCommerce.services.ProductService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,38 +30,45 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<GetProductResponseDto> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<ApiResponse<List<GetProductResponseDto>>> getAllProducts() {
+        List<GetProductResponseDto> products = productService.getAllProducts();
+        return ResponseEntity.ok(ApiResponse.success(products, "Products fetched successfully"));
     }
 
     @GetMapping("/{id}")
-    public GetProductResponseDto getProductById(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public ResponseEntity<ApiResponse<GetProductResponseDto>> getProductById(@PathVariable Long id) {
+        GetProductResponseDto product = productService.getProductById(id);
+        return ResponseEntity.ok(ApiResponse.success(product, "Product fetched successfully"));
     }
 
     @GetMapping("/{id}/details")
-    public GetProductWithDetailsResponseDto getProductWithDetailsById(@PathVariable Long id) {
-        return productService.getProductWithDetailsById(id);
+    public ResponseEntity<ApiResponse<GetProductWithDetailsResponseDto>> getProductWithDetailsById(@PathVariable Long id) {
+        GetProductWithDetailsResponseDto product = productService.getProductWithDetailsById(id);
+        return ResponseEntity.ok(ApiResponse.success(product, "Product fetched successfully"));
     }
-    
 
     @PostMapping
-    public GetProductWithDetailsResponseDto createProduct(@Valid @RequestBody CreateProductRequestDto requestDto) {
-        return productService.createProduct(requestDto);
+    public ResponseEntity<ApiResponse<GetProductWithDetailsResponseDto>> createProduct(@Valid @RequestBody CreateProductRequestDto requestDto) {
+        GetProductWithDetailsResponseDto product = productService.createProduct(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(product, "Product created successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+        return ResponseEntity.ok(ApiResponse.success(null, "Product deleted successfully"));
     }
 
     @GetMapping("/search")
-    public List<GetProductResponseDto> getProductsByCategory(@RequestParam("categoryName") String category) {
-        return productService.getProductsByCategory(category);
+    public ResponseEntity<ApiResponse<List<GetProductResponseDto>>> getProductsByCategory(@RequestParam("categoryName") String category) {
+        List<GetProductResponseDto> products = productService.getProductsByCategory(category);
+        return ResponseEntity.ok(ApiResponse.success(products, "Products fetched successfully"));
     }
 
     @GetMapping("/categories")
-    public List<String> getAllCategories() {
-        return productService.getAllCategories();
+    public ResponseEntity<ApiResponse<List<String>>> getAllCategories() {
+        List<String> categories = productService.getAllCategories();
+        return ResponseEntity.ok(ApiResponse.success(categories, "Categories fetched successfully"));
     }
 }

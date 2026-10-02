@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import com.example.FakeCommerce.dtos.CreateProductRequestDto;
 import com.example.FakeCommerce.dtos.GetProductResponseDto;
 import com.example.FakeCommerce.dtos.GetProductWithDetailsResponseDto;
+import com.example.FakeCommerce.exceptions.ResourceNotFoundException;
 import com.example.FakeCommerce.repositories.CategoryRepository;
 import com.example.FakeCommerce.repositories.ProductRepository;
 import com.example.FakeCommerce.schema.Category;
 import com.example.FakeCommerce.schema.Product;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,7 +22,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    // ── private helper — maps Product entity to response DTO ──────────────
+    // ── private helper ─────────────────────────────────────────────────────
     private GetProductResponseDto toResponseDto(Product p) {
         return GetProductResponseDto.builder()
                 .id(p.getId())
@@ -44,13 +44,13 @@ public class ProductService {
 
     public GetProductResponseDto getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
         return toResponseDto(product);
     }
 
     public GetProductWithDetailsResponseDto getProductWithDetailsById(Long id) {
         Product product = productRepository.findProductWithDetailsById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
         return GetProductWithDetailsResponseDto.builder()
                 .id(product.getId())
                 .title(product.getTitle())
@@ -64,7 +64,7 @@ public class ProductService {
 
     public GetProductWithDetailsResponseDto createProduct(CreateProductRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + requestDto.getCategoryId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Category with id " + requestDto.getCategoryId() + " not found"));
         Product product = Product.builder()
                 .title(requestDto.getTitle())
                 .description(requestDto.getDescription())
@@ -86,10 +86,9 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new EntityNotFoundException("Product not found with id: " + id);
-        }
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
+        productRepository.delete(product);
     }
 
     public List<GetProductResponseDto> getProductsByCategory(String categoryName) {
