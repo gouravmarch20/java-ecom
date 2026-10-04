@@ -40,5 +40,6 @@ public class Product extends BaseEntity {
 
     private String image;
 
-    private String rating;
+    @Column(precision = 3, scale = 1)
+    private BigDecimal rating;
 }

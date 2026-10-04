@@ -21,13 +21,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getMessage(), "Resource not found"));
     }
 
-    // handles BadRequestException → 400
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBadRequestException(BadRequestException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.error(ex.getMessage(), "Bad request"));
-    }
-
     // handles @Valid validation failures → 400
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationErrors(MethodArgumentNotValidException ex) {

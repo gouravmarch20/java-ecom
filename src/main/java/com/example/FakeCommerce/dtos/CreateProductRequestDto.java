@@ -26,5 +26,5 @@ public class CreateProductRequestDto {
     @NotNull(message = "Category is required")
     private Long categoryId;
 
-    private String rating;
+    private BigDecimal rating;
 }
