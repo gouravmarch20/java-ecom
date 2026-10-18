@@ -11,6 +11,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     List<Product> findByCategory_Name(String categoryName);
 
+    long countByCategory_Id(Long categoryId);
+
     @Query(nativeQuery = true, value = "SELECT DISTINCT c.name FROM categories c JOIN products p ON p.category_id = c.id")
     List<String> getAllLinkedCategories();
 

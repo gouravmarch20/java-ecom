@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.FakeCommerce.dtos.CreateCategoryRequestDto;
 import com.example.FakeCommerce.exceptions.ResourceNotFoundException;
 import com.example.FakeCommerce.repositories.CategoryRepository;
+import com.example.FakeCommerce.repositories.ProductRepository;
 import com.example.FakeCommerce.schema.Category;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     public Category createCategory(CreateCategoryRequestDto requestDto) {
         Category category = Category.builder()
@@ -31,6 +33,13 @@ public class CategoryService {
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category with id " + id + " not found"));
+    }
+
+    public long getProductCount(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Category with id " + id + " not found");
+        }
+        return productRepository.countByCategory_Id(id);
     }
 
     public void deleteCategory(Long id) {

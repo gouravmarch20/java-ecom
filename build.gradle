@@ -40,3 +40,25 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.named('bootRun') {
+    jvmArgs = [
+        '-javaagent:newrelic/newrelic.jar',
+        '-Dnewrelic.config.file=newrelic.yml'
+    ]
+}
+
+tasks.named('bootJar') {
+    manifest {
+        attributes 'Start-Class': 'com.example.FakeCommerce.FakeCommerceApplication'
+    }
+}
+
+// Run JAR with New Relic agent
+task runJar(type: JavaExec) {
+    group = 'application'
+    description = 'Run the application JAR with New Relic agent'
+    classpath = files(tasks.bootJar.outputs.files)
+    mainClass = 'com.example.FakeCommerce.FakeCommerceApplication'
+    jvmArgs = ['-javaagent:newrelic/newrelic.jar', '-Dnewrelic.config.file=newrelic.yml']
+}

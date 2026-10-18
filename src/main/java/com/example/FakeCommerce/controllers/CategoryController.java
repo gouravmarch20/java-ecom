@@ -51,4 +51,10 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok(ApiResponse.success(null, "Category deleted successfully"));
     }
+
+    @GetMapping("/{id}/products/count")
+    public ResponseEntity<ApiResponse<Long>> getProductCount(@PathVariable Long id) {
+        long count = categoryService.getProductCount(id);
+        return ResponseEntity.ok(ApiResponse.success(count, "Product count fetched successfully"));
+    }
 }

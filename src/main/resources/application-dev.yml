@@ -1,0 +1,4 @@
+spring:
+  flyway:
+    # db/seed holds fake development data (R__seed_dev_data.sql); only loaded with the 'dev' profile
+    locations: classpath:db/migration,classpath:db/seed
