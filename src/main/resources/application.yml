@@ -13,6 +13,26 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+   data:
+    redis:
+      client-type: jedis
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      jedis:
+        pool:
+          enabled: true
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: 2000ms
+   cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "fakecommerce:"
 
 logging:
   level:
